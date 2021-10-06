@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using API.Models;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using API.DTOs;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -11,55 +14,75 @@ namespace API.Controllers
     public class DevicesController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IMapper _mapper;
 
-        public DevicesController(IUnitOfWork unitOfWork)
+        public DevicesController(IUnitOfWork unitOfWork, UserManager<AppUser> userManager, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
+            _mapper = mapper;
         }
 
+        // Get all devices for the list
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Device>>> GetDevices()
+        public async Task<ActionResult<IEnumerable<DeviceDto>>> GetDevices()
         {
-            return Ok(await _unitOfWork.DeviceRepository.GetDevicesAsync());
+            var devices = await _unitOfWork.DeviceRepository.GetDevicesAsync();
+            var devicesToReturn = _mapper.Map<IEnumerable<DeviceDto>>(devices);
+            return Ok(devicesToReturn);
         }
 
-        [HttpGet("{name}")]
-        public async Task<ActionResult<Device>> GetDevices(string name) 
+        [HttpGet("assigned")]
+        public async Task<ActionResult<IEnumerable<DeviceDto>>> GetAssignedDevices()
         {
-            return await _unitOfWork.DeviceRepository.GetDeviceByNameAsync(name);
+            return Ok(await _unitOfWork.DeviceRepository.GetAssignedDevicesAsync());
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Device>> Add(Device device) {
-            if (!await _unitOfWork.DeviceRepository.Add(device)) return Ok("Device already exists");
+        [HttpGet("unassigned")]
+        public async Task<ActionResult<IEnumerable<Device>>> GetUnassignedDevices()
+        {
+            return Ok(await _unitOfWork.DeviceRepository.GetUnassignedDevicesAsync());
+        }
 
-            await _unitOfWork.SaveChangesAsync();
+        // Return device by id
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DeviceDto>> GetDevices(int id) 
+        {
+            var device = _mapper.Map<DeviceDto>(await _unitOfWork.DeviceRepository.GetDeviceByIdAsync(id));
             return device;
         }
 
-        [HttpPut]
-        public async Task<ActionResult> Update(Device device) 
+        // Assign the device with the id "id" to the logged user
+        [HttpGet("assign-device/{deviceId}")]
+        public async Task<ActionResult> AssignDevice(int deviceId) 
         {
-            _unitOfWork.DeviceRepository.Update(device);    
+            var username = _userManager.GetUserName(User);
+            if (username == null) return NotFound();
+
+            var device = await _unitOfWork.DeviceRepository.GetDeviceByIdAsync(deviceId);
+
+            if (device == null) return NotFound();
+            if (device.AppUserId != null) return BadRequest("Device already assigned to user");
+
+            await _unitOfWork.DeviceRepository.AssignDeviceAsync(device, username);  
             if (!await _unitOfWork.SaveChangesAsync()) return BadRequest("Error while updating");
 
-            return Ok("Device updated successfully");
-        } 
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id) 
-        {
-            if (id < 0) return BadRequest("Invalid id");
-            var device = await _unitOfWork.DeviceRepository.GetDeviceByIdAsync(id);
-            
-            if (device == null) return NotFound("Device not found"); 
-
-            _unitOfWork.DeviceRepository.Remove(device);
-            if (await _unitOfWork.SaveChangesAsync()) 
-                return Ok("Device deleted successfully");
-
-            return BadRequest("Failed to delete the device");
+            return Ok();
         }
+
+        // Unassign the device
+        [HttpDelete("unassign-device/{deviceId}")]
+        public async Task<ActionResult> UnassignDevice(int deviceId) 
+        {
+            var device = await _unitOfWork.DeviceRepository.GetDeviceByIdAsync(deviceId);
+
+            if (device.AppUserId == null) return NotFound();
+            
+            _unitOfWork.DeviceRepository.UnassignDevice(device);
+            if (!await _unitOfWork.SaveChangesAsync()) return BadRequest("Error while unassigning device");
+            return Ok();
+        }  
 
     }
 }

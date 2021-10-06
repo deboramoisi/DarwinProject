@@ -20,5 +20,7 @@ namespace API.DTOs
         [Required] public float Processor { get; set; }
         
         [Required] public int RAM { get; set; }
+        public int? AppUserId { get; set; }
+        public string UserName { get; set; }
     }
 }

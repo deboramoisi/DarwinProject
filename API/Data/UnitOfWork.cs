@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Interfaces;
+using API.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Data
 {
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DataContext _context;
-        public UnitOfWork(DataContext context)
+        private readonly UserManager<AppUser> _userManager;
+        public UnitOfWork(DataContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public IDeviceRepository DeviceRepository => new DeviceRepository(_context);
+        public IDeviceRepository DeviceRepository => new DeviceRepository(_context, _userManager);
 
         public bool HasChanges()
         {

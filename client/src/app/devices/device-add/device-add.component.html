@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-5">
+            <h2 class="text-center">Add device</h2>
+            <hr>
+            <div>
+                <div class="alert alert-info" *ngIf="addDeviceForm.dirty">
+                    <p><strong>Information: </strong>You have made changes. Any unsaved changes will be lost</p>
+                </div>
+            </div>
+            <form [formGroup]="addDeviceForm" (ngSubmit)="addDeviceForm.valid && addDevice()">
+                <app-text-input [formControl]="addDeviceForm.controls['name']" [label]='"Name"'></app-text-input>
+                <app-text-input [formControl]="addDeviceForm.controls['manufacturer']" [label]='"Manufacturer"'></app-text-input>
+                <app-text-input [formControl]="addDeviceForm.controls['type']" [label]='"Type"'></app-text-input>
+                <app-text-input [formControl]="addDeviceForm.controls['os']" [label]='"Operating System"'></app-text-input>
+                <app-text-input [formControl]="addDeviceForm.controls['osVersion']" [label]='"OS Version"' [type]='"number"'></app-text-input>
+                <app-text-input [formControl]="addDeviceForm.controls['processor']" [label]='"Processor"' [type]='"number"'></app-text-input>
+                <app-text-input [formControl]="addDeviceForm.controls['ram']" [label]='"RAM"' [type]='"number"'></app-text-input>
+                
+                <div class="form-group text-center">
+                    <button [disabled]="!addDeviceForm.valid" type="submit" class="btn btn-success col-5 mr-2">Save</button>
+                    <button class="btn btn-info col-6" routerLink='/devices'>Back to devices</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

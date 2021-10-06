@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Interfaces;
@@ -31,10 +28,10 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto) 
         {
-            if (await UserExists(registerDto.UserName)) return BadRequest("Username is already taken!");            
-
+            if (await UserExists(registerDto.Email)) return BadRequest("Username is already taken!");            
+            
             var user = _mapper.Map<AppUser>(registerDto);
-            user.UserName = user.UserName.ToLower();
+            user.UserName = registerDto.Email;
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
@@ -42,34 +39,27 @@ namespace API.Controllers
             var roleResult = await _userManager.AddToRoleAsync(user, "Member");
             if (!roleResult.Succeeded) return BadRequest(result.Errors);
             
-            return new UserDto {
-                UserName = user.UserName,
-                Token = await _tokenService.CreateToken(user)
-            };
+            return new UserDto(user.Id, user.Name, user.Email, await _tokenService.CreateToken(user));
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto) 
         {
             var user = await _userManager.Users
-                .SingleOrDefaultAsync(x => x.UserName==loginDto.UserName);
+                .SingleOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if (user == null) return Unauthorized("Invalid username");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-            if (!result.Succeeded) return Unauthorized();
+            if (!result.Succeeded) return Unauthorized("Invalid password");
 
-            return new UserDto 
-            {
-                UserName = user.UserName,
-                Token = await _tokenService.CreateToken(user)
-            };
+            return new UserDto(user.Id, user.Name, user.Email, await _tokenService.CreateToken(user));
         }
 
-        private async Task<bool> UserExists(string username) 
+        private async Task<bool> UserExists(string email) 
         {
-            return await _userManager.Users.AnyAsync(u => u.UserName == username);
+            return await _userManager.Users.AnyAsync(u => u.Email == email);
         }
     }
 }

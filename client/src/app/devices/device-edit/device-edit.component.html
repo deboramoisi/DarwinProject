@@ -1,0 +1,70 @@
+<div class="container" *ngIf="device">
+    <div class="row justify-content-center">
+        <div class="col-5">
+            <h2 class="text-center">Edit device</h2>
+            <hr>
+            <div>
+                <div class="alert alert-info" *ngIf="editDeviceForm.dirty"
+                >
+                    <p><strong>Information: </strong>You have made changes. Any unsaved changes will be lost</p>
+                </div>
+            </div>
+            <form #editDeviceForm="ngForm" id="editDeviceForm" (ngSubmit)="updateDevice()">
+                <input type="hidden" name="id">
+                <div class="form-group">
+                    <input type="text"
+                        [(ngModel)]="device.name"
+                        name="name"
+                        placeholder="Name"
+                        class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" 
+                        name="manufacturer"
+                        [(ngModel)]="device.manufacturer"
+                        placeholder="Manufacturer"
+                        class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" 
+                        name="type"
+                        [(ngModel)]="device.type"
+                        placeholder="Type"
+                        class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="text" 
+                        name="os"
+                        [(ngModel)]="device.os"
+                        placeholder="Operating System"
+                        class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="number" 
+                        name="osVersion"
+                        [(ngModel)]="device.osVersion"
+                        placeholder="OS Version"
+                        class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="number" 
+                        name="processor"
+                        [(ngModel)]="device.processor"
+                        placeholder="Processor"
+                        class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="number" 
+                        name="ram"
+                        [(ngModel)]="device.ram"
+                        placeholder="RAM"
+                        class="form-control">
+                </div>
+                <div class="form-group text-center">
+                    <button [disabled]="!editDeviceForm.dirty" type="submit" class="btn btn-success col-5 mr-2">Save</button>
+                    <button class="btn btn-info col-6" routerLink='/devices'>Back to devices</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

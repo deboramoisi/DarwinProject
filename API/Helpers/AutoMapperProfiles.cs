@@ -14,6 +14,11 @@ namespace API.Helpers
         {
             // Map from -> to
             CreateMap<RegisterDto, AppUser>();
+            CreateMap<Device, DeviceDto>()
+                .ForMember(dest => dest.UserName, options => {
+                    options.MapFrom(src => src.AppUser.UserName);
+                });
+            CreateMap<DeviceDto, Device>(); 
         }
     }
 }

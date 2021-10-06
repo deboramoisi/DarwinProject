@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" autocomplete="off">
+                <h2 class="text-center text-primary">Sign Up</h2>
+                <hr>
+
+                <app-text-input [formControl]="registerForm.controls['name']" [label]='"Name"'></app-text-input>
+                <app-text-input [formControl]="registerForm.controls['email']" [label]='"Email"' [type]='"email"'></app-text-input>
+                <app-text-input [formControl]="registerForm.controls['password']" [label]='"Password"' [type]='"password"'></app-text-input>
+                <app-text-input [formControl]="registerForm.controls['location']" [label]='"Location"'></app-text-input>
+
+                <div class="form-group text-center">
+                    <button [disabled]='!registerForm.valid' class="btn btn-success mr-2" type="submit">Register</button>
+                    <button class="btn btn-info" routerLink='/'>Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
