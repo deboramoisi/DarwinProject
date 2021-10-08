@@ -17,7 +17,7 @@ namespace API.Models
         
         [Required] public float OSVersion { get; set; }
         
-        [Required] public float Processor { get; set; }
+        [Required] public string Processor { get; set; }
         
         [Required] public int RAM { get; set; }
         

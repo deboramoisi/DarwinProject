@@ -11,12 +11,12 @@
             <form [formGroup]="addDeviceForm" (ngSubmit)="addDeviceForm.valid && addDevice()">
                 <app-text-input [formControl]="addDeviceForm.controls['name']" [label]='"Name"'></app-text-input>
                 <app-text-input [formControl]="addDeviceForm.controls['manufacturer']" [label]='"Manufacturer"'></app-text-input>
-                <select [formControl]="addDeviceForm.controls['type']" class="form-control mb-3">
+                <select [formControl]="addDeviceForm.controls['type']" class="form-control mb-3" >
                     <option *ngFor="let type of deviceTypes" value={{type}}>{{type}}</option>
                 </select>
                 <app-text-input [formControl]="addDeviceForm.controls['os']" [label]='"Operating System"'></app-text-input>
                 <app-text-input [formControl]="addDeviceForm.controls['osVersion']" [label]='"OS Version"' [type]='"number"'></app-text-input>
-                <app-text-input [formControl]="addDeviceForm.controls['processor']" [label]='"Processor"' [type]='"number"'></app-text-input>
+                <app-text-input [formControl]="addDeviceForm.controls['processor']" [label]='"Processor"'></app-text-input>
                 <app-text-input [formControl]="addDeviceForm.controls['ram']" [label]='"RAM"' [type]='"number"'></app-text-input>
                 
                 <div class="form-group text-center">

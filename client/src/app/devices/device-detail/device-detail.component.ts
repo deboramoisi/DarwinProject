@@ -10,6 +10,7 @@ import { DevicesService } from 'src/app/_services/devices.service';
 })
 export class DeviceDetailComponent implements OnInit {
   device: Device;
+  icon: string;
 
   constructor(private devicesService: DevicesService, private route: ActivatedRoute) { }
 
@@ -20,6 +21,11 @@ export class DeviceDetailComponent implements OnInit {
   loadDevice() {
     this.devicesService.getDevice(parseInt(this.route.snapshot.paramMap.get('id'))).subscribe(device => {
       this.device = device;
+      if (device.type == '1') {
+        this.icon = 'fa fa-mobile';
+      } else {
+        this.icon = 'fa fa-tablet';
+      }
     })
   }
 

@@ -38,7 +38,6 @@ export class DeviceAddComponent implements OnInit {
   }
 
   addDevice() {
-    console.log(this.addDeviceForm.value);
     this.devicesService.addDevice(this.addDeviceForm.value).subscribe(() => {
       this.toastr.success('Device added successfully');
     })

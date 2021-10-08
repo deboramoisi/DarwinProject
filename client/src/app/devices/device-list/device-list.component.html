@@ -5,7 +5,7 @@
 
 <p>List of companies' devices</p>
 
-<table class="table table-hover" style='margin-top: 40px;'>
+<table class="table table-hover table-test" style='margin-top: 40px;'>
     <thead class="thead-dark">
       <tr>
         <th scope="col">Name</th>
@@ -18,13 +18,11 @@
     </thead>
     <tbody>
     <tr *ngFor="let device of devices" >
-        <!-- <th scope="row">1</th> -->
         <td>{{device.name}}</td>
         <td>{{device.manufacturer}}</td>
-        <td>{{deviceTypes[device.type]}}</td>
-        <td>
-            <ng-container *ngIf="device.userName">{{device.userName}}</ng-container>
-            <ng-container *ngIf="!device.userName">-</ng-container>
+        <td>{{device.type}}</td>
+        <td [innerText]="device.userName">
+            {{device.username ? device.userName : '-'}}
         </td>
         <td>
           <button class="btn btn-primary mr-2" routerLink='/devices/{{device.id}}'><i class="fa fa-info"></i></button>
@@ -33,11 +31,17 @@
         </td>
         <td *appHasRole='["Member"]'>
             <div class="form-check" *ngIf="!device.appUserId">
-                <input class="form-check-input" type="checkbox" name="assignDevice" [value]="device.id" (change)="toggleAssignationDevice($event)" >
+                <input class="form-check-input td-test" type="checkbox" [value]="device.id" (change)="toggleAssignationDevice($event)">
                 <label class="form-check-label" for="assignDevice">
                   Assign
                 </label>
             </div>
+            <div class="form-check" *ngIf="(device.appUserId === user.id)">
+              <input class="form-check-input" type="checkbox" name="assignDevice" [value]="device.id" (change)="toggleAssignationDevice($event)" checked>
+              <label class="form-check-label" for="assignDevice">
+                Assign
+              </label>
+          </div>
         </td>
     </tr>
     </tbody>

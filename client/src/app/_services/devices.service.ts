@@ -27,6 +27,10 @@ export class DevicesService {
     return this.http.get(this.baseUrl + 'devices/assign-device/' + id);
   }
 
+  unassignDevice(id: number) {
+    return this.http.delete(this.baseUrl + 'devices/unassign-device/' + id);
+  }
+
   addDevice(device: Device) {
     return this.http.post(this.baseUrl + 'admin/add-device', device);
   }

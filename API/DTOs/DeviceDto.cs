@@ -11,13 +11,13 @@ namespace API.DTOs
         
         [Required] public string Manufacturer { get; set; }
         
-        [Required] public DeviceType Type { get; set; }
+        [Required] public string Type { get; set; }
         
         [Required] public string OS { get; set; }
         
         [Required] public float OSVersion { get; set; }
         
-        [Required] public float Processor { get; set; }
+        [Required] public string Processor { get; set; }
         
         [Required] public int RAM { get; set; }
         public int? AppUserId { get; set; }

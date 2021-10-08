@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { $ } from 'protractor';
 import { take } from 'rxjs/operators';
 import { Device } from 'src/app/_models/device';
+import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
 import { DevicesService } from 'src/app/_services/devices.service';
 import Swal from 'sweetalert2/dist/sweetalert2.js'; 
@@ -13,12 +16,20 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 export class DeviceListComponent implements OnInit {
   devices: Device[];
   deviceTypes: string[];
+  user: User;
 
-  constructor(private devicesService: DevicesService, public accountService: AccountService) { }
+  constructor(private devicesService: DevicesService, public accountService: AccountService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.loadDevices();
     this.loadDeviceTypes();
+    this.loadUser();
+  }
+
+  loadUser() {
+    this.accountService.currentUser$.subscribe(user => {
+      this.user = user;
+    })
   }
 
   loadDevices() {
@@ -34,10 +45,24 @@ export class DeviceListComponent implements OnInit {
   }
 
   toggleAssignationDevice(event) {
-    if (event.target.checked) {
-      this.devicesService.assignDevice(event.target.value).subscribe();
+    
+    let modifiedDevice;
+    this.devices.forEach(device => {
+      if (device.id == event.target.value) {
+        modifiedDevice = device;
+      }
+    })
+
+    if (event.target.checked) { 
+      this.devicesService.assignDevice(event.target.value).subscribe(() => {
+        this.toastr.success("Device assigned successfully");
+        modifiedDevice.userName = this.user.email;
+      })
     } else {
-      console.log('unchecked');
+      this.devicesService.unassignDevice(event.target.value).subscribe(() => {
+        this.toastr.success("Device unassigned successfully"); 
+        modifiedDevice.userName = null;
+      }) 
     }
   }
 

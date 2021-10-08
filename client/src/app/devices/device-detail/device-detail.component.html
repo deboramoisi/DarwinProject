@@ -1,1 +1,16 @@
-<h1 *ngIf="device">{{device.name}}</h1>
+<ng-container *ngIf="device">
+    <div class="row">
+        <div class="col-5">
+            <i class={{icon}}></i>
+        </div>
+        <div class="col-7">
+            <h2 class="mb-5">{{device.name}}</h2>
+            <div> <i>Made by:</i> {{device.manufacturer}} </div>
+            <div> <i>Operating System: </i> {{device.os}} </div>
+            <div> <i>OS Version: </i> {{device.os}} {{device.osVersion}} </div>
+            <div> <i>Type: </i> {{device.type}} </div>
+            <div> <i>Processor: </i> {{device.processor}} </div>
+            <div> <i>RAM: </i> {{device.ram}} GB </div>
+        </div>
+    </div>
+</ng-container>

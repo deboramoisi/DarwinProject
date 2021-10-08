@@ -29,7 +29,7 @@ export class DeviceEditComponent implements OnInit {
       id: [device.id],
       name: [device.name, Validators.required],
       manufacturer: [device.manufacturer, Validators.required],
-      type: [this.deviceTypes[device.type], Validators.required],
+      type: [device.type, Validators.required],
       os: [device.os, Validators.required],
       osVersion: [device.osVersion, Validators.required],
       processor: [device.processor, Validators.required],
@@ -40,6 +40,7 @@ export class DeviceEditComponent implements OnInit {
   loadDevice() {
     this.devicesService.getDevice(parseInt(this.router.snapshot.paramMap.get('id'))).subscribe(device => {
       this.device = device;
+      console.log('loaded');
       console.log(device);
 
       this.initializeForm(device);
@@ -53,6 +54,8 @@ export class DeviceEditComponent implements OnInit {
   }
 
   updateDevice() {
+    console.log('update');
+    console.log(this.editDeviceForm.value);
     this.device = this.editDeviceForm.value;
     this.devicesService.updateDevice(this.device).subscribe(() => {
       this.toastr.success('Device updated successfully');
