@@ -11,17 +11,28 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 })
 export class DeviceListComponent implements OnInit {
   devices: Device[];
+  deviceTypes: string[];
 
   constructor(private devicesService: DevicesService, public accountService: AccountService) { }
 
   ngOnInit(): void {
+    this.accountService.currentUser$.subscribe(user => {
+      console.log(user);
+    });
     this.loadDevices();
+    this.loadDeviceTypes();
   }
 
   loadDevices() {
     this.devicesService.getDevices().subscribe(devices => {
       this.devices = devices;
     });
+  }
+
+  loadDeviceTypes() {
+    this.devicesService.getDeviceTypes().subscribe(deviceTypes => {
+      this.deviceTypes = deviceTypes;
+    })
   }
 
   toggleAssignationDevice(event) {

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using API.DTOs;
 using AutoMapper;
+using System;
 
 namespace API.Controllers
 {
@@ -83,6 +84,12 @@ namespace API.Controllers
             if (!await _unitOfWork.SaveChangesAsync()) return BadRequest("Error while unassigning device");
             return Ok();
         }  
+
+        [HttpGet("device-types")]
+        public string[] GetDeviceTypes() 
+        {
+            return Enum.GetNames(typeof(DeviceType));
+        }
 
     }
 }

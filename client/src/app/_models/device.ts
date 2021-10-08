@@ -4,7 +4,7 @@ export interface Device {
     manufacturer: string;
     type: string;
     os: string;
-    osversion: number;
+    osVersion: number;
     processor: number;
     ram: number;
     appUserId?: number;

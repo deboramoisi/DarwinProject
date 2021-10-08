@@ -3,21 +3,10 @@
         <div class="col-4">
             <h2 class="text-center text-primary">Log in</h2>
             <hr>
-            <form #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off">
-                <div class="form-group">
-                    <input type="email"
-                        [(ngModel)]="model.Email"
-                        name="Email"
-                        placeholder="Email Address"
-                        class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="password"
-                        [(ngModel)]="model.password"
-                        name="password"
-                        placeholder="Password"
-                        class="form-control">
-                </div>
+            <form [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="off">
+                <app-text-input [formControl]="loginForm.controls['email']" [type]='"email"' [label]='"Email"'></app-text-input>
+                <app-text-input [formControl]="loginForm.controls['password']" [type]='"password"' [label]='"Password"' ></app-text-input>
+
                 <div class="form-group text-center">
                     <button class="btn btn-md btn-success mr-2">Sign in</button>
                     <button class="btn btn-md btn-info" routerLink='/register'>Don't have an account?</button>

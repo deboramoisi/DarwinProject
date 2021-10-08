@@ -21,7 +21,7 @@
         <!-- <th scope="row">1</th> -->
         <td>{{device.name}}</td>
         <td>{{device.manufacturer}}</td>
-        <td>{{device.type}}</td>
+        <td>{{deviceTypes[device.type]}}</td>
         <td>
             <ng-container *ngIf="device.userName">{{device.userName}}</ng-container>
             <ng-container *ngIf="!device.userName">-</ng-container>

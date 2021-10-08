@@ -101,6 +101,7 @@ namespace API.Data
         {
             var user = await _userManager.FindByNameAsync(username);
             return _context.Devices.Where(u => u.AppUserId == user.Id).Include(x => x.AppUser).FirstOrDefault();
-        } 
+        }
+ 
     }
 }

@@ -19,6 +19,10 @@ export class DevicesService {
     return this.http.get<Device>(this.baseUrl + 'devices/' + id);
   }
 
+  getDeviceTypes() {
+    return this.http.get<string[]>(this.baseUrl + 'devices/device-types');
+  }
+
   assignDevice(id: number) {
     return this.http.get(this.baseUrl + 'devices/assign-device/' + id);
   }
