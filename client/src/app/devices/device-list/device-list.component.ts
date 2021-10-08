@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 import { Device } from 'src/app/_models/device';
 import { AccountService } from 'src/app/_services/account.service';
 import { DevicesService } from 'src/app/_services/devices.service';
@@ -16,9 +17,6 @@ export class DeviceListComponent implements OnInit {
   constructor(private devicesService: DevicesService, public accountService: AccountService) { }
 
   ngOnInit(): void {
-    this.accountService.currentUser$.subscribe(user => {
-      console.log(user);
-    });
     this.loadDevices();
     this.loadDeviceTypes();
   }
@@ -44,18 +42,24 @@ export class DeviceListComponent implements OnInit {
   }
 
   deleteDevice(id: number) {
-    Swal.fire({
-      title: 'Are you sure you want to delete the device?',
-      text: 'You will not be able to recover it!',
-      icon: 'warning',
-      showCancelButton: true
-    }).then((result) => {
-      if (result.value) {
-        this.devicesService.deleteDevice(id).subscribe(() => {
-          this.devices = this.devices.filter(x => x.id != id);
-        })        
+    this.accountService.currentUser$.pipe(take(1)).subscribe(user => {
+      if (user.roles.includes("Admin")) {
+        Swal.fire({
+          title: 'Are you sure you want to delete the device?',
+          text: 'You will not be able to recover it!',
+          icon: 'warning',
+          showCancelButton: true
+        }).then((result) => {
+          if (result.value) {
+            this.devicesService.deleteDevice(id).subscribe(() => {
+              this.devices = this.devices.filter(x => x.id != id);
+            })        
+          }
+        })    
+      } else {
+        Swal("Access Unauthorized", "You are not allowed to delete devices!", "error");
       }
-    })    
+    })
   }
 
 }

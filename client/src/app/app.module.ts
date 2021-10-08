@@ -12,7 +12,6 @@ import { RegisterComponent } from './register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DeviceListComponent } from './devices/device-list/device-list.component';
 import { DeviceDetailComponent } from './devices/device-detail/device-detail.component';
-import { ListsComponent } from './lists/lists.component';
 import { ToastrModule } from 'ngx-toastr';
 import { ErrorInterceptor } from './_interceptors/error.interceptor';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
@@ -21,6 +20,7 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { DeviceEditComponent } from './devices/device-edit/device-edit.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { DeviceAddComponent } from './devices/device-add/device-add.component';
+import { HasRoleDirective } from './_directives/has-role.directive';
 
 @NgModule({
   declarations: [
@@ -30,12 +30,12 @@ import { DeviceAddComponent } from './devices/device-add/device-add.component';
     RegisterComponent,
     DeviceListComponent,
     DeviceDetailComponent,
-    ListsComponent,
     NotFoundComponent,
     LoginComponent,
     DeviceEditComponent,
     TextInputComponent,
-    DeviceAddComponent
+    DeviceAddComponent,
+    HasRoleDirective
   ],
   imports: [
     BrowserModule,

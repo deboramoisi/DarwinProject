@@ -18,26 +18,19 @@ namespace API
             var host = CreateHostBuilder(args).Build();
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
-            var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
             try 
             {
                 var context = services.GetRequiredService<DataContext>();
+                var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
                 await context.Database.MigrateAsync();
-                await Seed.SeedRoles(roleManager);
+                await Seed.SeedRoles(roleManager, userManager);
             }
             catch (Exception ex) 
             {
                 var logger = services.GetRequiredService<ILogger>();
                 logger.LogError(ex, "An error occured during DB seeding");
             }
-
-            // var admin = new AppUser {
-            //     UserName = "admin"
-            // };
-
-            // var userManager = services.GetRequiredService<UserManager<AppUser>>();
-            // await userManager.CreateAsync(admin, "P@$$w0rd");
-            // await userManager.AddToRoleAsync(admin, "Admin");
 
             host.Run();
         }

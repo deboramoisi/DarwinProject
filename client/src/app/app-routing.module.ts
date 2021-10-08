@@ -6,9 +6,9 @@ import { DeviceEditComponent } from './devices/device-edit/device-edit.component
 import { DeviceListComponent } from './devices/device-list/device-list.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { HomeComponent } from './home/home.component';
-import { ListsComponent } from './lists/lists.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { AdminGuard } from './_guards/admin.guard';
 import { AuthGuard } from './_guards/auth.guard';
 
 const routes: Routes = [
@@ -20,9 +20,8 @@ const routes: Routes = [
     children: [
       {path: 'devices', component: DeviceListComponent},
       {path: 'devices/:id', component: DeviceDetailComponent},
-      {path: 'device/edit/:id', component: DeviceEditComponent},
-      {path: 'device/add', component: DeviceAddComponent},
-      {path: 'lists', component: ListsComponent}
+      {path: 'device/edit/:id', component: DeviceEditComponent, canActivate: [AdminGuard]},
+      {path: 'device/add', component: DeviceAddComponent, canActivate: [AdminGuard]}
     ]
   },
   {path: 'register', component: RegisterComponent},

@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 // Actions for admins: add, edit, delete devices
 namespace API.Controllers
 {
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : BaseApiController
     {
 

@@ -22,13 +22,15 @@ export class AccountService {
         if (user) {
           localStorage.setItem('user', JSON.stringify(user));
           this.setCurrentUser(user);
-          console.log(user);
         } 
       })
     );
   }
 
   setCurrentUser(user: User) {
+    user.roles = [];
+    const roles = this.getDecodedTokenForRoles(user.token).role;
+    Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
     this.currentUserSource.next(user);
   }
 
@@ -46,6 +48,10 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+  }
+
+  getDecodedTokenForRoles(token: string) {
+    return JSON.parse(atob(token.split('.')[1]));
   }
 
 }

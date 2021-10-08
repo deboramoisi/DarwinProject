@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('/devices');
       }
     );
-    console.log(this.user);
   }
 
 }

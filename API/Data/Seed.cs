@@ -9,7 +9,7 @@ namespace API.Data
 {
     public class Seed
     {
-        public static async Task SeedRoles(RoleManager<AppRole> roleManager) 
+        public static async Task SeedRoles(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager) 
         {
             if (await roleManager.Roles.AnyAsync()) return;
 
@@ -23,6 +23,16 @@ namespace API.Data
             {
                 await roleManager.CreateAsync(role);
             }
+
+            // create an admin
+            var admin = new AppUser 
+            {
+                Email = "admin@gmail.com",
+                UserName = "admin@gmail.com"
+            };
+
+            await userManager.CreateAsync(admin, "D@rwin");
+            await userManager.AddToRoleAsync(admin, "Admin");
         }
     }
 }
