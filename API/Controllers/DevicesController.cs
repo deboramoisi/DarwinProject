@@ -51,12 +51,13 @@ namespace API.Controllers
         public async Task<ActionResult<DeviceDto>> GetDevices(int id) 
         {
             var device = _mapper.Map<DeviceDto>(await _unitOfWork.DeviceRepository.GetDeviceByIdAsync(id));
+            device.UserName = (device.AppUserId != null) ? _userManager.FindByIdAsync(device.AppUserId.ToString()).Result.Email : null;
             return device;
         }
 
         // Assign the device with the id "id" to the logged user
         [HttpGet("assign-device/{deviceId}")]
-        public async Task<ActionResult> AssignDevice(int deviceId) 
+        public async Task<ActionResult<DeviceDto>> AssignDevice(int deviceId) 
         {
             var username = _userManager.GetUserName(User);
             if (username == null) return NotFound();
@@ -69,12 +70,12 @@ namespace API.Controllers
             await _unitOfWork.DeviceRepository.AssignDeviceAsync(device, username);  
             if (!await _unitOfWork.SaveChangesAsync()) return BadRequest("Error while updating");
 
-            return Ok();
+            return Ok(_mapper.Map<DeviceDto>(device));
         }
 
         // Unassign the device
         [HttpDelete("unassign-device/{deviceId}")]
-        public async Task<ActionResult> UnassignDevice(int deviceId) 
+        public async Task<ActionResult<DeviceDto>> UnassignDevice(int deviceId) 
         {
             var device = await _unitOfWork.DeviceRepository.GetDeviceByIdAsync(deviceId);
 
@@ -82,7 +83,7 @@ namespace API.Controllers
             
             _unitOfWork.DeviceRepository.UnassignDevice(device);
             if (!await _unitOfWork.SaveChangesAsync()) return BadRequest("Error while unassigning device");
-            return Ok();
+            return Ok(_mapper.Map<DeviceDto>(device));
         }  
 
         [HttpGet("device-types")]

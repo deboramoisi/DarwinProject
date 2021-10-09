@@ -21,9 +21,7 @@
         <td>{{device.name}}</td>
         <td>{{device.manufacturer}}</td>
         <td>{{device.type}}</td>
-        <td [innerText]="device.userName">
-            {{device.username ? device.userName : '-'}}
-        </td>
+        <td [innerText]="device.userName"></td>
         <td>
           <button class="btn btn-primary mr-2" routerLink='/devices/{{device.id}}'><i class="fa fa-info"></i></button>
           <button *appHasRole='["Admin"]' routerLink='/device/edit/{{device.id}}' class="btn btn-secondary"><i class="fa fa-pencil-square-o"></i></button>
@@ -31,16 +29,14 @@
         </td>
         <td *appHasRole='["Member"]'>
             <div class="form-check" *ngIf="!device.appUserId">
-                <input class="form-check-input td-test" type="checkbox" [value]="device.id" (change)="toggleAssignationDevice($event)">
+                <input [value]="device.id" (change)="toggleAssignationDevice($event)" class="form-check-input" type="checkbox">
                 <label class="form-check-label" for="assignDevice">
                   Assign
                 </label>
             </div>
             <div class="form-check" *ngIf="(device.appUserId === user.id)">
-              <input class="form-check-input" type="checkbox" name="assignDevice" [value]="device.id" (change)="toggleAssignationDevice($event)" checked>
-              <label class="form-check-label" for="assignDevice">
-                Assign
-              </label>
+              <input name="assignDevice" [value]="device.id" (change)="toggleAssignationDevice($event)" checked class="form-check-input" type="checkbox" >
+              <label class="form-check-label">Assign</label>
           </div>
         </td>
     </tr>

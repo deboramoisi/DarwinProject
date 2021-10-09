@@ -47,21 +47,19 @@ export class DeviceListComponent implements OnInit {
   toggleAssignationDevice(event) {
     
     let modifiedDevice;
-    this.devices.forEach(device => {
-      if (device.id == event.target.value) {
-        modifiedDevice = device;
-      }
-    })
+    const devId = event.target.value;
+
+    modifiedDevice = this.devices.find(x => x.id == devId);
 
     if (event.target.checked) { 
-      this.devicesService.assignDevice(event.target.value).subscribe(() => {
+      this.devicesService.assignDevice(devId).subscribe((device: Device) => {
         this.toastr.success("Device assigned successfully");
-        modifiedDevice.userName = this.user.email;
+        modifiedDevice.userName = device.userName;
       })
     } else {
-      this.devicesService.unassignDevice(event.target.value).subscribe(() => {
+      this.devicesService.unassignDevice(devId).subscribe((device: Device) => {
         this.toastr.success("Device unassigned successfully"); 
-        modifiedDevice.userName = null;
+        modifiedDevice.userName = device.userName;
       }) 
     }
   }

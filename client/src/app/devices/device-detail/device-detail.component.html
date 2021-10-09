@@ -1,16 +1,35 @@
 <ng-container *ngIf="device">
     <div class="row">
         <div class="col-5">
-            <i class={{icon}}></i>
+            <div class="row">
+                <div class="col-1" routerLink='/devices'><i class="fa fa-arrow-circle-o-left fa-3x"></i></div>
+                <div class="col-11">
+                    <img src="{{device.type === 'Tablet' ? 'http://clipartmag.com/images/tablet-png-7.png' : 'https://upload.wikimedia.org/wikipedia/commons/2/2d/Mobile-Smartphone-icon.png'}}" alt="Other type">
+                </div>
+            </div>        
         </div>
-        <div class="col-7">
-            <h2 class="mb-5">{{device.name}}</h2>
-            <div> <i>Made by:</i> {{device.manufacturer}} </div>
-            <div> <i>Operating System: </i> {{device.os}} </div>
-            <div> <i>OS Version: </i> {{device.os}} {{device.osVersion}} </div>
-            <div> <i>Type: </i> {{device.type}} </div>
-            <div> <i>Processor: </i> {{device.processor}} </div>
-            <div> <i>RAM: </i> {{device.ram}} GB </div>
+        <div class="col-5 offset-1">
+            <ul class="list-group list-group-flush ml-3">
+                <li class="list-group-item"><h2 class="mb-5">{{device.name}}</h2></li>
+                <li class="list-group-item"><i>Made by:</i> {{device.manufacturer}}</li>
+                <li class="list-group-item"><i>Operating System: </i> {{device.os}}</li>
+                <li class="list-group-item"><i>OS Version: </i> {{device.os}} {{device.osVersion}}</li>
+                <li class="list-group-item"><i>Type: </i> {{device.type}}</li>
+                <li class="list-group-item"><i>Processor: </i> {{device.processor}}</li>
+                <li class="list-group-item"><i>RAM: </i> {{device.ram}} GB</li>
+                <li class="list-group-item">
+                    <i>Assigned to: </i><span [innerText]="device.userName"></span>
+                </li>
+              </ul> 
+
+              <div class="form-check" *ngIf="!device.appUserId">
+                    <input [value]="device.id" (change)="toggleAssignationDevice($event)" class="form-check-input" type="checkbox">
+                    <label class="form-check-label">Assign</label>
+              </div>
+              <div class="form-check" *ngIf="this.user.id === device.appUserId">
+                    <input [value]="device.id" (change)="toggleAssignationDevice($event)" class="form-check-input" type="checkbox" checked>
+                    <label class="form-check-label">Assign</label>
+              </div>
         </div>
     </div>
 </ng-container>

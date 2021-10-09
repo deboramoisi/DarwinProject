@@ -1,0 +1,21 @@
+img {
+    width: 36vw;
+    height: 85vh;
+}
+
+ul {
+    z-index: -1;
+    position: relative; 
+}
+
+.arrow {
+    width: 2vw;
+}
+
+i {
+    color: #f7c122;
+}
+
+.fa-3x {
+    cursor: pointer;
+}
