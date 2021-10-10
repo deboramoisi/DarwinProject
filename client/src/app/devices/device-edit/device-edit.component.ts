@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -40,8 +40,6 @@ export class DeviceEditComponent implements OnInit {
   loadDevice() {
     this.devicesService.getDevice(parseInt(this.router.snapshot.paramMap.get('id'))).subscribe(device => {
       this.device = device;
-      console.log('loaded');
-      console.log(device);
 
       this.initializeForm(device);
     })  
@@ -54,8 +52,6 @@ export class DeviceEditComponent implements OnInit {
   }
 
   updateDevice() {
-    console.log('update');
-    console.log(this.editDeviceForm.value);
     this.device = this.editDeviceForm.value;
     this.devicesService.updateDevice(this.device).subscribe(() => {
       this.toastr.success('Device updated successfully');

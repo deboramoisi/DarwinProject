@@ -60,11 +60,7 @@ namespace API
                     };   
                 });
 
-            services.AddAuthorization(options => 
-            {
-                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("AdminDeviceManipulation", policy=>policy.RequireRole("Admin"));
-            });
+            services.AddAuthorization();
 
             services.AddControllers();
             services.AddCors();

@@ -82,26 +82,6 @@ namespace API.Data
             device.AppUserId = null;
             Update(device);
         }
-
-        public async Task<IEnumerable<Device>> GetAssignedDevicesAsync() 
-        {
-            return await _context.Devices.Where(x => x.AppUserId != null)
-                            // .Include(u => u.AppUser)
-                            .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Device>> GetUnassignedDevicesAsync() 
-        {
-            return await _context.Devices.Where(x => x.AppUserId == null)
-                            //.Include(u => u.AppUser)
-                            .ToListAsync();
-        }
-
-        public async Task<Device> GetDeviceForUserAsync(string username) 
-        {
-            var user = await _userManager.FindByNameAsync(username);
-            return _context.Devices.Where(u => u.AppUserId == user.Id).Include(x => x.AppUser).FirstOrDefault();
-        }
  
     }
 }

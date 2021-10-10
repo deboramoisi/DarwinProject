@@ -34,18 +34,6 @@ namespace API.Controllers
             return Ok(devicesToReturn);
         }
 
-        [HttpGet("assigned")]
-        public async Task<ActionResult<IEnumerable<DeviceDto>>> GetAssignedDevices()
-        {
-            return Ok(await _unitOfWork.DeviceRepository.GetAssignedDevicesAsync());
-        }
-
-        [HttpGet("unassigned")]
-        public async Task<ActionResult<IEnumerable<Device>>> GetUnassignedDevices()
-        {
-            return Ok(await _unitOfWork.DeviceRepository.GetUnassignedDevicesAsync());
-        }
-
         // Return device by id
         [HttpGet("{id}")]
         public async Task<ActionResult<DeviceDto>> GetDevices(int id) 
@@ -78,8 +66,9 @@ namespace API.Controllers
         public async Task<ActionResult<DeviceDto>> UnassignDevice(int deviceId) 
         {
             var device = await _unitOfWork.DeviceRepository.GetDeviceByIdAsync(deviceId);
+            if (device == null) return NotFound();
 
-            if (device.AppUserId == null) return NotFound();
+            if (device.AppUserId == null) return BadRequest("Device wasn't assigned");
             
             _unitOfWork.DeviceRepository.UnassignDevice(device);
             if (!await _unitOfWork.SaveChangesAsync()) return BadRequest("Error while unassigning device");

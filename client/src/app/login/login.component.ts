@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoginUser } from '../_models/loginUser';
 import { AccountService } from '../_services/account.service';
 
 @Component({
@@ -9,7 +10,10 @@ import { AccountService } from '../_services/account.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  user: any = {};
+  user: LoginUser = {
+    email: '',
+    password: ''
+  };
   loginForm: FormGroup;
 
   constructor(private accountService: AccountService, private router: Router, private fb: FormBuilder) { }
@@ -27,7 +31,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.user = this.loginForm.value;
-    this.accountService.login(this.user).subscribe(response => {
+    this.accountService.login(this.user).subscribe(() => {
         this.router.navigateByUrl('/devices');
       }
     );

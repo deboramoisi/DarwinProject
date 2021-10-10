@@ -76,6 +76,7 @@ export class DeviceListComponent implements OnInit {
           if (result.value) {
             this.devicesService.deleteDevice(id).subscribe(() => {
               this.devices = this.devices.filter(x => x.id != id);
+              this.toastr.success("Device deleted successfully");
             })        
           }
         })    

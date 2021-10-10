@@ -12,10 +12,7 @@ namespace API.Interfaces
         Task<IEnumerable<Device>> GetDevicesAsync();
         Task<Device> GetDeviceByIdAsync(int id);
         Task<Device> GetDeviceByNameAsync(string name);
-        Task<Device> GetDeviceForUserAsync(string username);
         Task AssignDeviceAsync(Device device, string username);
         void UnassignDevice(Device device);
-        Task<IEnumerable<Device>> GetAssignedDevicesAsync();
-        Task<IEnumerable<Device>> GetUnassignedDevicesAsync();
     }
 }
